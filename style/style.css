@@ -1,0 +1,213 @@
+
+/* global body content */
+
+.body_content {
+    padding: 80px 40px 30px 290px;
+}
+
+
+/* css of src/components/header/ */
+
+ul {
+    padding: 0;
+    margin: 0;
+}
+
+.header_container {
+    padding-top: 50px;
+    width: 250px;
+    position: fixed;
+    height: 100vh;
+    background-color: #0a001a;
+    z-index: 9998;
+}
+
+.menu_item {
+    color: white;
+    list-style: none;
+    width: 100%;
+    padding: 12px 8px;
+}
+
+.menu_item_active {
+    background-color: #000;
+    cursor: pointer;
+    color: white;
+    list-style: none;
+    width: 100%;
+    padding: 12px 8px;
+}
+
+.menu_item_active .glyphicon {
+    color: #ff6600;
+}
+
+.menu_item:hover {
+    background-color: #000;
+    cursor: pointer;
+}
+
+.menu_item:hover .glyphicon {
+    color: #ff6600;
+}
+
+.header_top_bar {
+    position: fixed;
+    width: 100%;
+    height: 50px;
+    background-color: #0a001a;
+    z-index: 9999;
+}
+
+.glyphicon {
+    margin: 0 15px;
+}
+
+/* css of src/components/dashboard */
+
+.dashboard_title {
+    color: white;
+    font-weight: 600;
+    font-size: 25px;
+}
+
+.dashboard_container_title {
+    padding: 20px;
+    background-color:  #56666b;
+    border-radius: 5px;
+}
+
+.dashboard_container_title p {
+    color: white;
+}
+
+.container_stats_dashboard {
+text-align: center;
+margin-top: 40px;
+}
+
+.container_stats_dashboard span{
+ font-size: 50px;
+}
+
+.container_stats_dashboard p {
+    
+font-weight: bold;
+}
+
+.bloc_stats_dashboard {
+    padding: 20px;
+    color: white;
+}
+
+.bloc_stats_dashboard.users {
+    background-color: #f25732;
+}
+
+.bloc_stats_dashboard.groups {
+    background-color: #1e7b91;
+}
+
+/* css of src/components/users */
+
+.page_title {
+    color: white;
+    font-weight: 600;
+    font-size: 25px;
+}
+
+.users_container_title {
+    padding: 20px;
+    background-color:  #f25732;
+}
+
+.users_container_title p {
+    color: white;
+}
+
+.table_list {
+    margin-top: 30px;
+}
+
+
+ul.ul_modal_selected_user {
+    list-style: none;
+}
+
+ul.ul_modal_selected_user li {
+    padding: 7px 0;
+}
+
+h1.h1_modal_selected_user {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.right {
+text-align: right;
+}
+
+.noPadding.col-md-4, .noPadding.col-md-8 {
+    padding: 0;
+}
+
+.selected_user_label {
+    font-weight: 700;
+}
+
+.table_manage_user {
+    width: 100%;
+}
+
+.table_manage_user tr {
+    height: 40px;
+}
+
+.table_manage_user tr th {
+    text-align: right;
+    padding-right: 15px;
+}
+
+div.button_manage_modal {
+    margin-top: 20px;
+}
+
+div.button_manage_modal input, div.button_manage_modal button {
+    display: inline-block;
+    font-size: 15px;
+    margin-right: 5px;
+}
+
+/* css of src/containers/groups */
+
+.groups_container_title {
+    padding: 20px;
+    background-color:  #1e7b91;
+    color: white;
+}
+
+.groups_container_title p {
+    color: white;
+}
+
+.select_filter {
+    margin: 10px 0 ;
+}
+
+.filter_bar {
+    background-color: rgb(203, 206, 209);
+    position: relative;
+    height: auto;
+    overflow: hidden;
+}
+
+/* css of src/components/groups/manage_group_item */
+
+.containers_form_manage label {
+    font-size: 14px;
+    padding-left: 5px;
+}
+
+.containers_form_manage input {
+    font-size: 14px;
+}
