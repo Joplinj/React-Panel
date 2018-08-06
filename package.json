@@ -43,6 +43,7 @@
     "react-redux": "4.3.0",
     "react-router": "^2.0.1",
     "react-timestamp": "^4.4.0",
-    "redux": "^3.0.4"
+    "redux": "^3.0.4",
+    "redux-thunk": "^2.3.0"
   }
 }
