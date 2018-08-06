@@ -1,9 +1,4 @@
-### ReactRedux-Starter ###
+How to run ?
 
-Pour installer le projet se placer dans le projet et lancer : 
-
-```
-> npm install
-> npm start
-```
-
+npm install
+npm start
