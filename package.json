@@ -23,7 +23,7 @@
     "css-loader": "^1.0.0",
     "eslint": "^4.19.1",
     "file-loader": "^1.1.11",
-    "jquery": "^2.2.1",
+    "jquery": "^3.0.0",
     "jsdom": "^8.1.0",
     "mocha": "^2.4.5",
     "react-addons-test-utils": "^0.14.7",
@@ -34,7 +34,7 @@
   "dependencies": {
     "babel-preset-stage-1": "^6.1.18",
     "firebase": "^5.1.0",
-    "lodash": "^3.10.1",
+    "lodash": "^4.17.5",
     "react": "^15.5.4",
     "react-calendar": "^2.16.1",
     "react-dom": "^15.5.4",
