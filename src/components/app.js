@@ -7,8 +7,6 @@ import Groups from "../containers/groups";
 import { connect } from "react-redux";
 
 class App extends Component {
-  componentWillMount() {}
-
   render() {
     const renderPageContent = () => {
       if (this.props.activePage === "Dashboard") {

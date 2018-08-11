@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import UserItem from "../components/users/user_item";
@@ -14,13 +14,13 @@ class Users extends Component {
       selecteduser: {},
       selecteduserChange: [],
       IsModalUserVisible: false,
-      timeSelectedUser: "",
+      timeSelectedUser: 0,
       countryFilter: "", // Contain the country clicked
       userlistcountry: [] // Contain the user list sorted by country clicked
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     db.collection("user")
       .get()
       .then(collection => {
@@ -35,7 +35,7 @@ class Users extends Component {
       });
   }
 
-  // If a country is clicked, store the new group list sorted by country in the state grouplistcountry
+  // If a country is clicked, store the new user list sorted by country in the state grouplistcountry
   changeUserListSorted() {
     if (
       this.state.countryFilter &&
@@ -179,7 +179,7 @@ class Users extends Component {
                   return (
                     <UserItem
                       callback={() => this.UserSelected(userItem)}
-                      key={userItem.email}
+                      key={userItem.id}
                       email={userItem.email}
                       country={userItem.country}
                       city={userItem.city}

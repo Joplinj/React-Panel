@@ -1,16 +1,16 @@
 import React from "react";
 import Timestamp from "react-timestamp";
+import PropTypes from "prop-types";
 
 const GroupItem = ({
   plannedDate,
   country,
   city,
-  key,
   allowedMembers,
   callback
 }) => {
   return (
-    <tr key={key} onClick={callback}>
+    <tr onClick={callback}>
       <td>
         <Timestamp time={plannedDate} format="full" />
       </td>
@@ -20,5 +20,13 @@ const GroupItem = ({
     </tr>
   );
 };
+
+GroupItem.propTypes = {
+  plannedDate: PropTypes.object.isRequired,
+  country: PropTypes.string.isRequired,
+  city: PropTypes.string.isRequired,
+  allowedMembers: PropTypes.number.isRequired,
+  callback: PropTypes.func.isRequired
+}
 
 export default GroupItem;

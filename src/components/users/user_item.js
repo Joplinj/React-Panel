@@ -1,9 +1,10 @@
 import React from "react";
 import Timestamp from "react-timestamp";
+import PropTypes from "prop-types";
 
-const UserItem = ({ email, country, city, key, subscribe, callback }) => {
+const UserItem = ({ email, country, city, subscribe, callback }) => {
   return (
-    <tr key={key} onClick={callback}>
+    <tr onClick={callback}>
       <td>{email}</td>
       <td>{country}</td>
       <td>{city}</td>
@@ -13,5 +14,13 @@ const UserItem = ({ email, country, city, key, subscribe, callback }) => {
     </tr>
   );
 };
+
+UserItem.propTypes = {
+  subscribe: PropTypes.number.isRequired,
+  country: PropTypes.string.isRequired,
+  city: PropTypes.string.isRequired,
+  email: PropTypes.string.isRequired,
+  callback: PropTypes.func.isRequired
+}
 
 export default UserItem;

@@ -10,7 +10,7 @@ class Dashboard extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     db.collection("user")
       .get()
       .then(userlist => {
