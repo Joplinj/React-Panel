@@ -45,9 +45,11 @@
     "react-dom": "^15.5.4",
     "react-firestore": "^0.8.1",
     "react-modal": "^3.4.5",
+    "react-preloader-icon": "^0.2.0",
     "react-redux": "4.3.0",
     "react-router": "^2.0.1",
     "react-timestamp": "^4.4.0",
+    "react-vis": "^1.10.4",
     "redux": "^3.0.4",
     "redux-thunk": "^2.3.0"
   }

@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 
 Modal.setAppElement(".container_body");
 
+// The global modal style
 const modalUserStyle = {
   overlay: {
     backgroundColor: "rgba(0,0,0, .7)"
@@ -23,20 +24,17 @@ const modalUserStyle = {
   }
 };
 
-const ManageUserItem = ({
+const AddUserItem = ({
   isOpen,
-  id,
   email,
-  country,
   city,
-  subscribe,
+  country,
   callback,
   submit,
-  changeEmail,
-  changeCountry,
-  changeCity,
-  deleteUser
+  isErrorVisible,
+  errorMessage
 }) => {
+
   return (
     <Modal
       isOpen={isOpen}
@@ -44,52 +42,37 @@ const ManageUserItem = ({
       shouldCloseOnOverlayClick={true}
       onRequestClose={callback}
     >
-      <h1 className="h1_modal_selected_user">Manage user '{id}'</h1>
+      <h1 className="h1_modal_selected_user">Create user</h1>
       <div className="containers_form_manage">
         <form onSubmit={submit}>
           <div className="form-group">
-            <label>Email :</label>
+            <label>Email</label>
             <input
               className="form-control user_manage_input"
               type="text"
-              onChange={changeEmail}
-              defaultValue={email ? email : ""}
+              onChange={email}
             />{" "}
           </div>
           <div className="form-group">
-            <label>Country :</label>
+            <label>Country </label>
+            <input className="form-control user_manage_input" type="text" onChange={country} />{" "}
+          </div>
+          <div className="form-group">
+            <label>City </label>
             <input
               className="form-control user_manage_input"
               type="text"
-              onChange={changeCountry}
-              defaultValue={country ? country : ""}
+              onChange={city}
             />{" "}
           </div>
-          <div className="form-group">
-            <label>City :</label>
-            <input
-              className="form-control user_manage_input"
-              type="text"
-              onChange={changeCity}
-              defaultValue={city ? city : ""}
-            />{" "}
-          </div>
-          <div className="form-group">
-            <label>Member since :</label>
-            <Timestamp time={subscribe} format="full" />
+          <div className="error_message_add_user">
+            {isErrorVisible && errorMessage}
           </div>
           <div className="button_manage_modal">
-            <input type="submit" value="Save" className="btn btn-light" />
             <button onClick={callback} value="Save" className="btn btn-light">
               Cancel
             </button>
-            <button
-              onClick={deleteUser}
-              value="Delete"
-              className="btn_delete btn btn-light"
-            >
-              Delete
-            </button>
+            <input type="submit" value="Save" className="btn btn-light" />
           </div>
         </form>
       </div>
@@ -97,19 +80,15 @@ const ManageUserItem = ({
   );
 };
 
-ManageUserItem.propTypes = {
-  email: PropTypes.string,
-  subscribe: PropTypes.number,
-  country: PropTypes.string,
-  city: PropTypes.string,
-  id: PropTypes.string,
+AddUserItem.propTypes = {
   isOpen: PropTypes.bool.isRequired,
+  email: PropTypes.func.isRequired,
+  city: PropTypes.func.isRequired,
+  country: PropTypes.func.isRequired,
   callback: PropTypes.func.isRequired,
   submit: PropTypes.func.isRequired,
-  changeEmail: PropTypes.func.isRequired,
-  changeCountry: PropTypes.func.isRequired,
-  changeCity: PropTypes.func.isRequired,
-  deleteUser: PropTypes.func.isRequired
+  isErrorVisible: PropTypes.bool.isRequired,
+  errorMessage: PropTypes.string
 };
 
-export default ManageUserItem;
+export default AddUserItem;

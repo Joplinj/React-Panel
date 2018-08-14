@@ -1,5 +1,6 @@
 @import url("../../node_modules/rc-calendar/assets/index.css");
 @import url("../node_modules/rc-select/assets/index.css");
+@import url("../node_modules/react-vis/dist/style.css");
 /* global body content */
 
 .body_content {
@@ -9,6 +10,12 @@
 /* css of src/components/header/ */
 
 ul {
+  padding: 0;
+  margin: 0;
+}
+
+.col-xs-5,
+.col-xs-7 {
   padding: 0;
   margin: 0;
 }
@@ -61,6 +68,21 @@ ul {
 
 .glyphicon {
   margin: 0 15px;
+}
+
+.container_preloader {
+  text-align: center;
+  width: 100%;
+  padding-top: 100px;
+}
+
+.container_small_preloader {
+  text-align: center;
+  width: 100%;
+}
+
+.container_preloader_center {
+  display: inline-block;
 }
 
 /* css of src/components/dashboard */
@@ -128,6 +150,10 @@ ul {
   margin-top: 30px;
 }
 
+table.list tr {
+  cursor: pointer;
+}
+
 ul.ul_modal_selected_user {
   list-style: none;
 }
@@ -138,7 +164,10 @@ ul.ul_modal_selected_user li {
 
 h1.h1_modal_selected_user {
   font-size: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  padding: 20px;
+  color: white;
+  background-color: #f25732;
 }
 
 .right {
@@ -156,6 +185,7 @@ h1.h1_modal_selected_user {
 
 .table_manage_user {
   width: 100%;
+  padding: 20px;
 }
 
 .table_manage_user tr {
@@ -168,7 +198,8 @@ h1.h1_modal_selected_user {
 }
 
 div.button_manage_modal {
-  margin-top: 20px;
+  margin-top: 35px;
+  color: #17687a;
 }
 
 div.button_manage_modal input,
@@ -176,6 +207,14 @@ div.button_manage_modal button {
   display: inline-block;
   font-size: 15px;
   margin-right: 5px;
+}
+
+/* css of src/components/users/add_user_item */
+
+.containers_form_manage input.user_manage_input {
+  background-color: #cc4726;
+  border: 0;
+  color: white;
 }
 
 /* css of src/containers/groups */
@@ -191,7 +230,6 @@ div.button_manage_modal button {
 }
 
 .select_filter {
-  margin: 10px 0;
 }
 
 .filter_bar {
@@ -199,25 +237,98 @@ div.button_manage_modal button {
   position: relative;
   height: auto;
   overflow: hidden;
+  padding: 10px 0;
 }
 
 /* css of src/components/groups/manage_group_item */
+.containers_form_manage {
+  padding: 0 20px 20px;
+  color: white;
+}
 
 .containers_form_manage label {
   font-size: 14px;
   padding-left: 5px;
 }
 
-.containers_form_manage input {
+.containers_form_manage input.group_manage_input {
   font-size: 14px;
+  background-color: #17687a;
+  border: 0;
+  color: white;
 }
 
 .containers_form_manage span.glyphicon {
-  color: rgb(83, 83, 228);
+  color: #f3e631;
   cursor: pointer;
+  font-size: 18px;
 }
 
 .containers_form_manage .container_calendar {
   position: absolute;
   box-shadow: 0 5px 14px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.3) inset;
+}
+
+h1.h1_modal_selected_group {
+  font-size: 20px;
+  padding: 20px;
+  color: white;
+  background-color: #1e7b91;
+}
+
+.container_manage_group_users_in {
+  background-color: #f25732;
+  color: white;
+  height: 440px;
+}
+
+.container_manage_group_users_in h4 {
+  padding: 20px;
+}
+
+.container_manage_group_users_in .users_in_item {
+  font-size: 12px;
+  text-align: center;
+}
+
+.container_manage_group_users_in .users_in_item span {
+  font-size: 40px;
+}
+
+/* css of src/components/groups/add_group_item */
+
+.error_message_add_group {
+  color: rgb(189, 17, 17);
+}
+
+.btn_delete {
+  float: right;
+}
+
+/* css of src/containers/statistics */
+
+.legend_stats {
+  text-align: left;
+  margin-left: 40px;
+}
+
+.legend_stats span.orange {
+  color: #f25732;
+  margin-right: 5px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-top: -5px;
+}
+
+.legend_stats span.blue {
+  color: #1e7b91;
+  margin-right: 5px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-top: -5px;
+}
+
+.legend_stats p {
+  display: inline-block;
+  font-weight: normal;
 }

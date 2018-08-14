@@ -4,6 +4,9 @@ import { bindActionCreators } from "redux";
 import UserItem from "../components/users/user_item";
 import { db } from "../components/firebase_config";
 import ManageUserItem from "../components/users/manage_user_item";
+import AddUserItem from "../components/users/add_user_item";
+import PreloaderIcon from "react-preloader-icon";
+import Puff from "react-preloader-icon/loaders/Puff";
 
 class Users extends Component {
   constructor(props) {
@@ -14,9 +17,13 @@ class Users extends Component {
       selecteduser: {},
       selecteduserChange: [],
       IsModalUserVisible: false,
+      IsModalAddUserVisible: false,
       timeSelectedUser: 0,
       countryFilter: "", // Contain the country clicked
-      userlistcountry: [] // Contain the user list sorted by country clicked
+      userlistcountry: [], // Contain the user list sorted by country clicked
+      IsErrorMsgAddUserVisible: false,
+      errorMessage: "",
+      newUser: { country: "", city: "", email: "", subscribe_date: "" }
     };
   }
 
@@ -87,8 +94,87 @@ class Users extends Component {
         city: this.state.selecteduserChange.city
       });
     this.CloseUserModal();
-    this.setState({ loading: true });
     this.ChangeSaved();
+  }
+
+  handleDeleteSelectedUser() {
+    const idDeleteUser = this.state.selecteduser.id;
+    db.collection("user")
+      .doc(idDeleteUser)
+      .delete();
+
+    this.ReloadDbCall();
+  }
+
+  handleNewCountry(event) {
+    event.preventDefault();
+    const NewUser = this.state.newUser;
+    NewUser.country = event.target.value;
+    this.setState({
+      newUser: NewUser
+    });
+  }
+
+  handleNewEmail(event) {
+    event.preventDefault();
+    const NewUser = this.state.newUser;
+    NewUser.email = event.target.value;
+    this.setState({
+      newUser: NewUser
+    });
+  }
+
+  handleNewCity(event) {
+    event.preventDefault();
+    const NewUser = this.state.newUser;
+    NewUser.city = event.target.value;
+    this.setState({
+      newUser: NewUser
+    });
+  }
+
+  handleSubmitNewUser(event) {
+    event.preventDefault();
+    const newUser = this.state.newUser;
+    newUser.subscribe_date = new Date();
+    if (
+      newUser.subscribe_date != "" &&
+      newUser.email != "" &&
+      newUser.country != "" &&
+      newUser.city != ""
+    ) {
+      db.collection("user")
+        .doc()
+        .set(newUser);
+      this.CloseAddUserModal();
+      this.setState({ loading: true });
+      this.ReloadDbCall();
+    } else {
+      this.setState({
+        IsErrorMsgAddUserVisible: true,
+        errorMsgAddUser:
+          "One of those fields is empty, please complete all fields"
+      });
+    }
+  }
+
+  ReloadDbCall() {
+    db.collection("user")
+      .get()
+      .then(collection => {
+        this.setState({
+          userlist: collection.docs.map(doc => ({
+            ...doc.data(),
+            id: doc.id
+          })),
+          userlistcountry: collection.docs.map(doc => ({
+            ...doc.data(),
+            id: doc.id
+          })),
+          loading: false
+        });
+        this.changeUserListSorted.bind(this);
+      });
   }
 
   // Store the country clicked in the state countryFilter
@@ -103,13 +189,13 @@ class Users extends Component {
     const email = this.state.selecteduserChange.email;
     const country = this.state.selecteduserChange.country;
     const city = this.state.selecteduserChange.city;
-    const newSelectedUser = this.state.userlist.find(
+    const newSelectedUser = this.state.userlistcountry.find(
       user => user.id == idSelectedUser
     );
     newSelectedUser.email = email;
     newSelectedUser.country = country;
     newSelectedUser.city = city;
-    this.setState({ selecteduser: newSelectedUser, loading: false });
+    this.setState({ selecteduser: newSelectedUser });
   }
 
   UserSelected(userItem) {
@@ -129,6 +215,20 @@ class Users extends Component {
 
   CloseUserModal() {
     this.setState({ IsModalUserVisible: false });
+  }
+
+  CloseAddUserModal() {
+    this.setState({
+      IsModalAddUserVisible: false
+    });
+  }
+
+  OpenModalAddUser() {
+    this.setState({
+      IsModalAddUserVisible: true,
+      newUser: { country: "", city: "", email: "", subscribe_date: 0 },
+      IsErrorMsgAddUserVisible: false
+    });
   }
 
   render() {
@@ -156,12 +256,31 @@ class Users extends Component {
               <option>United States</option>
             </select>
           </div>
+
+          <div>
+            <button
+              onClick={() => this.OpenModalAddUser()}
+              className="btn btn-success"
+            >
+              Add User
+            </button>
+          </div>
         </div>
         <div className="table_list">
           {this.state.loading ? (
-            <p>Loading</p>
+            <div className="container_preloader">
+              <div className="container_preloader_center">
+                <PreloaderIcon
+                  loader={Puff}
+                  size={80}
+                  strokeWidth={5}
+                  strokeColor="#006064"
+                  duration={900}
+                />
+              </div>
+            </div>
           ) : (
-            <table className="table table-hover">
+            <table className="table table-hover list">
               <thead className="thead-dark">
                 <tr>
                   <th>Email</th>
@@ -203,6 +322,19 @@ class Users extends Component {
               changeCountry={this.handleChangeCountry.bind(this)}
               changeCity={this.handleChangeCity.bind(this)}
               id={this.state.selecteduser.id}
+              deleteUser={this.handleDeleteSelectedUser.bind(this)}
+            />
+          }
+          {
+            <AddUserItem
+              isOpen={this.state.IsModalAddUserVisible}
+              email={this.handleNewEmail.bind(this)}
+              country={this.handleNewCountry.bind(this)}
+              city={this.handleNewCity.bind(this)}
+              callback={() => this.CloseAddUserModal()}
+              submit={this.handleSubmitNewUser.bind(this)}
+              isErrorVisible={this.state.IsErrorMsgAddUserVisible}
+              errorMessage={this.state.errorMsgAddUser}
             />
           }
         </div>

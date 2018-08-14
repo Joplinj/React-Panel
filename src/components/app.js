@@ -4,6 +4,7 @@ import Header from "./header/header";
 import Dashboard from "./dashboard/dashboard";
 import Users from "../containers/users";
 import Groups from "../containers/groups";
+import Statistics from "../containers/statistics";
 import { connect } from "react-redux";
 
 class App extends Component {

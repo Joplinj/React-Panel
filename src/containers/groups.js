@@ -4,7 +4,9 @@ import { bindActionCreators } from "redux";
 import GroupItem from "../components/groups/group_item";
 import { db } from "../components/firebase_config";
 import ManageGroupItem from "../components/groups/manage_group_item";
-
+import AddGroupItem from "../components/groups/add_group_item";
+import PreloaderIcon from "react-preloader-icon";
+import Puff from "react-preloader-icon/loaders/Puff";
 class Groups extends Component {
   constructor(props) {
     super(props);
@@ -15,10 +17,14 @@ class Groups extends Component {
       selectedgroupChange: [], // Array contain the group clicked with changes
       IsModalGroupVisible: false,
       IsCalendarModalGroupVisible: false,
+      IsModalAddGroupVisible: false,
       timeSelectedGroup: { seconds: 0 }, // Timestamp of selected user stored here
       countryFilter: "", // Contain the country clicked
       grouplistcountry: [], // Contain the group list sorted by country clicked
-      plannedDateChange: { seconds: 0 }
+      plannedDateChange: { seconds: 0 },
+      newGroup: { country: "", city: "", allowed_members: 0, date: "" },
+      IsErrorMsgAddGroupVisible: false,
+      errorMsgAddGroup: ""
     };
   }
 
@@ -86,6 +92,14 @@ class Groups extends Component {
     });
   }
 
+  PlannedDateChanged(value) {
+    if (value) {
+      const newDate = { seconds: value._d.getTime() / 1000 };
+      this.setState({ plannedDateChange: newDate });
+      this.ToogleCalendarVisibility();
+    }
+  }
+
   // Called when the save button is clicked. Send the selected group with changes in the database
   handleSubmit(event) {
     event.preventDefault();
@@ -100,6 +114,94 @@ class Groups extends Component {
     this.CloseGroupModal();
     this.setState({ loading: true });
     this.ChangeSaved();
+  }
+
+  handleDeleteSelectedGroup() {
+    const idDeleteGroup = this.state.selectedgroup.id;
+    db.collection("group")
+      .doc(idDeleteGroup)
+      .delete();
+
+    this.ReloadDbCall();
+  }
+
+  handleNewAllowedMembers(event) {
+    event.preventDefault();
+    const NewGroup = this.state.newGroup;
+    NewGroup.allowed_members = parseInt(event.target.value);
+    this.setState({
+      newGroup: NewGroup
+    });
+  }
+
+  handleNewCountry(event) {
+    event.preventDefault();
+    const NewGroup = this.state.newGroup;
+    NewGroup.country = event.target.value;
+    this.setState({
+      newGroup: NewGroup
+    });
+  }
+
+  handleNewCity(event) {
+    event.preventDefault();
+    const NewGroup = this.state.newGroup;
+    NewGroup.city = event.target.value;
+    this.setState({
+      newGroup: NewGroup
+    });
+  }
+
+  PlannedDateNewGroup(value) {
+    const newDate = new Date(value._d.getTime());
+    const NewGroup = this.state.newGroup;
+    NewGroup.date = newDate;
+    this.setState({ newGroup: NewGroup });
+    this.ToogleCalendarVisibility();
+  }
+
+  handleSubmitNewGroup(event) {
+    event.preventDefault();
+    const newGroup = this.state.newGroup;
+    if (
+      newGroup.date != "" &&
+      newGroup.allowed_members != 0 &&
+      newGroup.allowed_members != "" &&
+      newGroup.country != "" &&
+      newGroup.city != ""
+    ) {
+      db.collection("group")
+        .doc()
+        .set(newGroup);
+      this.CloseAddGroupModal();
+      this.setState({ loading: true });
+      this.ReloadDbCall();
+    } else {
+      this.setState({
+        IsErrorMsgAddGroupVisible: true,
+        errorMsgAddGroup:
+          "One of those fields is empty, please complete all fields"
+      });
+    }
+  }
+
+  ReloadDbCall() {
+    db.collection("group")
+      .get()
+      .then(collection => {
+        this.setState({
+          grouplist: collection.docs.map(doc => ({
+            ...doc.data(),
+            id: doc.id
+          })),
+          grouplistcountry: collection.docs.map(doc => ({
+            ...doc.data(),
+            id: doc.id
+          })),
+          loading: false
+        });
+        this.changeGroupListSorted.bind(this);
+      });
   }
 
   // Store the country clicked in the state countryFilter
@@ -132,12 +234,12 @@ class Groups extends Component {
       {
         selectedgroup: groupItem,
         IsModalGroupVisible: true,
-        selectedgroupChange: groupItem,
+        selectedgroupChange: groupItem
       },
-      function() {
+      () => {
         this.setState({
-          timeSelectedGroup: { seconds:this.state.selectedgroup.date.seconds },
-          plannedDateChange: { seconds:this.state.selectedgroup.date.seconds }
+          timeSelectedGroup: { seconds: this.state.selectedgroup.date.seconds },
+          plannedDateChange: { seconds: this.state.selectedgroup.date.seconds }
         });
       }
     );
@@ -150,18 +252,25 @@ class Groups extends Component {
     });
   }
 
+  CloseAddGroupModal() {
+    this.setState({
+      IsModalAddGroupVisible: false,
+      IsCalendarModalGroupVisible: false
+    });
+  }
+
+  OpenModalAddGroup() {
+    this.setState({
+      IsModalAddGroupVisible: true,
+      newGroup: { country: "", city: "", allowed_members: 0, date: "" },
+      IsErrorMsgAddGroupVisible: false
+    });
+  }
+
   ToogleCalendarVisibility() {
     this.setState(prevState => ({
       IsCalendarModalGroupVisible: !prevState.IsCalendarModalGroupVisible
     }));
-  }
-
-  PlannedDateChanged(value) {
-    if (value) {
-      const newDate = { seconds: value._d.getTime() / 1000 };
-      this.setState({ plannedDateChange: newDate });
-      this.ToogleCalendarVisibility();
-    }
   }
 
   render() {
@@ -189,12 +298,30 @@ class Groups extends Component {
               <option>United States</option>
             </select>
           </div>
+          <div>
+            <button
+              onClick={() => this.OpenModalAddGroup()}
+              className="btn btn-success"
+            >
+              Add Group
+            </button>
+          </div>
         </div>
         <div className="table_list">
           {this.state.loading ? (
-            <p>Loading</p>
+            <div className="container_preloader">
+              <div className="container_preloader_center">
+                <PreloaderIcon
+                  loader={Puff}
+                  size={80}
+                  strokeWidth={5}
+                  strokeColor="#006064"
+                  duration={900}
+                />
+              </div>
+            </div>
           ) : (
-            <table className="table table-hover">
+            <table className="table table-hover list">
               <thead className="thead-dark">
                 <tr>
                   <th>Planned date</th>
@@ -229,7 +356,12 @@ class Groups extends Component {
               allowedMembers={this.state.selectedgroup.allowed_members}
               country={this.state.selectedgroup.country}
               city={this.state.selectedgroup.city}
-              plannedDate={this.state.plannedDateChange.seconds != 0 ? this.state.plannedDateChange.seconds : this.state.timeSelectedGroup.seconds}
+              plannedDate={
+                this.state.plannedDateChange.seconds != 0
+                  ? this.state.plannedDateChange.seconds
+                  : this.state.timeSelectedGroup.seconds
+              }
+              usersIn={this.state.selectedgroup != {} && this.state.selectedgroup.users_in}
               callback={() => this.CloseGroupModal()}
               submit={this.handleSubmit.bind(this)}
               changeAllowedMembers={this.handleChangeAllowedMembers.bind(this)}
@@ -239,6 +371,22 @@ class Groups extends Component {
               isCalendarVisible={this.state.IsCalendarModalGroupVisible}
               toogleCalendarVisible={() => this.ToogleCalendarVisibility()}
               plannedDateChanged={this.PlannedDateChanged.bind(this)}
+              deleteGroup={this.handleDeleteSelectedGroup.bind(this)}
+            />
+          }
+          {
+            <AddGroupItem
+              isOpen={this.state.IsModalAddGroupVisible}
+              allowedMembers={this.handleNewAllowedMembers.bind(this)}
+              country={this.handleNewCountry.bind(this)}
+              city={this.handleNewCity.bind(this)}
+              callback={() => this.CloseAddGroupModal()}
+              submit={this.handleSubmitNewGroup.bind(this)}
+              isCalendarVisible={this.state.IsCalendarModalGroupVisible}
+              toogleCalendarVisible={() => this.ToogleCalendarVisibility()}
+              plannedDate={this.PlannedDateNewGroup.bind(this)}
+              isErrorVisible={this.state.IsErrorMsgAddGroupVisible}
+              errorMessage={this.state.errorMsgAddGroup}
             />
           }
         </div>
