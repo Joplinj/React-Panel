@@ -1,4 +1,7 @@
-How to run ?
+What is it ?
+An administrator panel for a personnal project.
+Not really re usable actually.
 
-npm install
-npm start
+How to run ?
+In the repository : npm install
+                    npm start
