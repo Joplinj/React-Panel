@@ -1,6 +1,6 @@
 <b>What is it ?</b><br />
 An administrator panel for a personnal project.<br />
-It help to manage all data from our firestore database.
+It help to manage all data from our firestore database.<br />
 Not really re usable actually.<br /><br />
 
 <b>How to run ?</b><br />
